@@ -19,19 +19,19 @@ class MainActivity : AppCompatActivity() {
         }
 //        var values = ContentValues()
 //        values.put(
-//            WingsProvider._ID, 1
-//        )
-//        values.put(
 //            WingsProvider.QUANTITY, 5
 //        )
 //        values.put(
 //            WingsProvider.TYPE, "Wing"
 //        )
 //        values.put(
-//            WingsProvider.PRICE, 100
+//            WingsProvider.SAUCE, "BBQ"
+//        )
+//        values.put(
+//            WingsProvider.DRINK, "water"
 //        )
 //        val uri = contentResolver.insert(
-//            WingsProvider.C
+//            WingsProvider.CONTENT_URI, values
 //        )
 
     }

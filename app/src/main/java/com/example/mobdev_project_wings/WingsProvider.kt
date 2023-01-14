@@ -18,21 +18,22 @@ class WingsProvider():ContentProvider() {
         val URL = "content://" + PROVIDER_NAME + "/order"
         val CONTENT_URI = Uri.parse(URL)
         val _ID = "_id"
-        val PRICE = "price"
+        val PRICE = 1
         val QUANTITY = "quantity"
         val TYPE = "quantity"
-        val NAME = "name"
-        //private val STUDENTS_PROJECTION_MAP: HashMap<String, String>? = null
+        val SAUCE = "quantity"
+        val DRINK = "quantity"
+//        val NAME = "name"
+//        private val STUDENTS_PROJECTION_MAP: HashMap<String, String>? = null
         val order = 1
         val order_ID = 2
         val uriMatcher: UriMatcher? = null
         val DATABASE_NAME = "wings"
-        val TABLE_NAME = "order"
+        val TABLE_NAME = "orders"
         val DATABASE_VERSION = 1
         //can have without name column maybe??
         val CREATE_DB_TABLE =
-            " CREATE TABLE " + TABLE_NAME + " (_id INTEGER PRIMARY KEY, "+ " quantity INTEGER NOT NULL, "  +" type TEXT NOT NULL, " + // " name TEXT, "
-                    " price INTEGER NOT NULL);"
+            " CREATE TABLE " + TABLE_NAME + " (_id INTEGER PRIMARY KEY AUTOINCREMENT, "+ " quantityp INTEGER, "  +" types TEXT, " + " sauces TEXT, " + "drinks TEXT," + " price INTEGER);"
         private var sUriMatcher = UriMatcher(UriMatcher.NO_MATCH);
         init
         {
@@ -77,14 +78,13 @@ class WingsProvider():ContentProvider() {
     }
 
     override fun insert(uri: Uri, values: ContentValues?): Uri? {
-//        val rowID = db!!.insert(TABLE_NAME, "", values)
-//        if (rowID > 0) {
-//            val _uri = ContentUris.withAppendedId(CONTENT_URI, rowID)
-//            context!!.contentResolver.notifyChange(_uri, null)
-//            return _uri
-//        }
-//        throw SQLException("Failed to add a record into $uri")
-        TODO("Not yet implemented")
+        val rowID = db!!.insert(TABLE_NAME, "", values)
+        if (rowID > 0) {
+            val _uri = ContentUris.withAppendedId(CONTENT_URI, rowID)
+            context!!.contentResolver.notifyChange(_uri, null)
+            return _uri
+        }
+        throw SQLException("Failed to add a record into $uri")
     }
 
     override fun delete(p0: Uri, p1: String?, p2: Array<out String>?): Int {

@@ -1,5 +1,6 @@
 package com.example.mobdev_project_wings
 
+import android.content.ContentValues
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -16,6 +17,25 @@ class MainActivity : AppCompatActivity() {
             val intent= Intent(this, SecondActivity::class.java)
             startActivity(intent)
         }
+//        var values = ContentValues()
+//        values.put(
+//            WingsProvider._ID, 1
+//        )
+//        values.put(
+//            WingsProvider.QUANTITY, 5
+//        )
+//        values.put(
+//            WingsProvider.TYPE, "Wing"
+//        )
+//        values.put(
+//            WingsProvider.PRICE, 100
+//        )
+//        val uri = contentResolver.insert(
+//            WingsProvider.C
+//        )
+
+    }
+    public fun insertInitial(){
 
     }
 }

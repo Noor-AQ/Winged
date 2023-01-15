@@ -45,6 +45,7 @@ class SecondActivity : AppCompatActivity() {
             txt4.text = "";
             val txt5 : TextView = findViewById(R.id.textView8);
             txt5.text= "";
+            sum = 0.0;
         }
 
 

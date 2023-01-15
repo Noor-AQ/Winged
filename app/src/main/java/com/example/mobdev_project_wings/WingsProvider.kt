@@ -15,7 +15,7 @@ class WingsProvider():ContentProvider() {
 
     companion object {
         val PROVIDER_NAME = "com.example.mobdev_project_wings.WingsProvider"
-        val URL = "content://" + PROVIDER_NAME + "/order"
+        val URL = "content://" + PROVIDER_NAME + "/orders"
         val CONTENT_URI = Uri.parse(URL)
         val _ID = "_id"
         val PRICE = "price"
@@ -24,8 +24,8 @@ class WingsProvider():ContentProvider() {
         val SAUCES = "sauces"
         val DRINKS = "drinks"
 //        private val STUDENTS_PROJECTION_MAP: HashMap<String, String>? = null
-        val order = 1
-        val order_ID = 2
+        val ORDERS = 1
+        val ORDERS_ID = 2
         val uriMatcher: UriMatcher? = null
         val DATABASE_NAME = "restaurant"
         val TABLE_NAME = "orders"
@@ -37,8 +37,8 @@ class WingsProvider():ContentProvider() {
         private var sUriMatcher = UriMatcher(UriMatcher.NO_MATCH);
         init
         {
-            sUriMatcher.addURI(PROVIDER_NAME, "order", order);
-            sUriMatcher.addURI(PROVIDER_NAME, "order/#", order_ID);
+            sUriMatcher.addURI(PROVIDER_NAME, "orders", ORDERS);
+            sUriMatcher.addURI(PROVIDER_NAME, "orders/#", ORDERS_ID);
         }
     }
     private var db: SQLiteDatabase? = null
@@ -89,11 +89,11 @@ class WingsProvider():ContentProvider() {
     override fun delete(uri: Uri, selection: String?, selectionArgs: Array<String>?): Int {
         var count = 0
         when (uriMatcher!!.match(uri)) {
-            order -> count = db!!.delete(
+            ORDERS -> count = db!!.delete(
                 TABLE_NAME, selection,
                 selectionArgs
             )
-            order_ID -> {
+            ORDERS_ID -> {
                 val id = uri.pathSegments[1]
                 count = db!!.delete(
                     TABLE_NAME,

@@ -30,6 +30,8 @@ class SecondActivity : AppCompatActivity() {
 
         bt.setOnClickListener(){
 
+//            val uri = contentResolver.delete(WingsProvider.CONTENT_URI,null, null)
+
             if(quantity == -1 || types == "" || sauces == "" || drinks == "")
                 Toast.makeText(this, "COMPLETE ORDER PLEASE", Toast.LENGTH_LONG).show()
             else {

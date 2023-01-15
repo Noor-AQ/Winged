@@ -108,8 +108,23 @@ class WingsProvider():ContentProvider() {
         return count
     }
 
-    override fun update(p0: Uri, p1: ContentValues?, p2: String?, p3: Array<out String>?): Int {
-        TODO("Not yet implemented")
+    override fun update(uri: Uri, values: ContentValues?, selection: String?, selectionArgs: Array<out String>?): Int {
+        var count = 0
+        when (uriMatcher!!.match(uri)) {
+            ORDERS -> count = db!!.update(
+                TABLE_NAME, values, selection,
+                selectionArgs
+            )
+            ORDERS_ID -> count = db!!.update(
+                TABLE_NAME,
+                values,
+                _ID + " = " + uri.pathSegments[1] + (if (!TextUtils.isEmpty(selection)) " AND ($selection)" else ""),
+                selectionArgs
+            )
+            else -> throw IllegalArgumentException("Unknown URI $uri")
+        }
+        context!!.contentResolver.notifyChange(uri, null)
+        return count
     }
 
 }

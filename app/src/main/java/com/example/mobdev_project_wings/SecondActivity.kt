@@ -9,7 +9,9 @@ import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import android.content.Intent
+import android.os.Build
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 
 class SecondActivity : AppCompatActivity() {
@@ -19,6 +21,7 @@ class SecondActivity : AppCompatActivity() {
     var sauces:String = ""
     var drinks:String = ""
     var COMPLETE: Boolean = false
+    @RequiresApi(Build.VERSION_CODES.R)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_second)
@@ -44,6 +47,8 @@ class SecondActivity : AppCompatActivity() {
                 txt.text = sum.toString();
                 startService();
             }
+
+            contentResolver.update(WingsProvider.CONTENT_URI,null,null)
         }
 
         bt2.setOnClickListener(View.OnClickListener { stopService() })

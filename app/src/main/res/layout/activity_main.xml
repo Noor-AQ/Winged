@@ -38,7 +38,7 @@
         android:layout_width="170dp"
         android:layout_height="202dp"
         android:layout_marginTop="8dp"
-        android:text="Eat your favourite chicken wings with the sauces of your choice!! You can also order a half-half, which is 2 different sauces in one order!!"
+        android:text="Eat your favourite chicken wings with the sauces of your choice!! Order Now and Enjoy your Meal!"
         android:textColor="#FFA987"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"

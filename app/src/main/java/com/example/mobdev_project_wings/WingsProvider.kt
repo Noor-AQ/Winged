@@ -18,22 +18,22 @@ class WingsProvider():ContentProvider() {
         val URL = "content://" + PROVIDER_NAME + "/order"
         val CONTENT_URI = Uri.parse(URL)
         val _ID = "_id"
-        val PRICE = 1
+        val PRICE = "price"
         val QUANTITY = "quantity"
-        val TYPE = "quantity"
-        val SAUCE = "quantity"
-        val DRINK = "quantity"
-//        val NAME = "name"
+        val TYPES = "types"
+        val SAUCES = "sauces"
+        val DRINKS = "drinks"
 //        private val STUDENTS_PROJECTION_MAP: HashMap<String, String>? = null
         val order = 1
         val order_ID = 2
         val uriMatcher: UriMatcher? = null
-        val DATABASE_NAME = "wings"
+        val DATABASE_NAME = "restaurant"
         val TABLE_NAME = "orders"
         val DATABASE_VERSION = 1
         //can have without name column maybe??
         val CREATE_DB_TABLE =
-            " CREATE TABLE " + TABLE_NAME + " (_id INTEGER PRIMARY KEY AUTOINCREMENT, "+ " quantityp INTEGER, "  +" types TEXT, " + " sauces TEXT, " + "drinks TEXT," + " price INTEGER);"
+            " CREATE TABLE " + TABLE_NAME + " (_id INTEGER PRIMARY KEY AUTOINCREMENT, "+ " quantity INTEGER, "  +" types TEXT, " + " sauces TEXT, " + "drinks TEXT," +
+                    " price INTEGER);"
         private var sUriMatcher = UriMatcher(UriMatcher.NO_MATCH);
         init
         {
@@ -57,8 +57,7 @@ class WingsProvider():ContentProvider() {
 
         override fun onCreate(): Boolean {
             val context = context
-            val dbHelper = DatabaseHelper(context!!)
-
+            val dbHelper = DatabaseHelper(context)
             db = dbHelper.writableDatabase
             return if (db == null) false else true
     }
@@ -87,8 +86,26 @@ class WingsProvider():ContentProvider() {
         throw SQLException("Failed to add a record into $uri")
     }
 
-    override fun delete(p0: Uri, p1: String?, p2: Array<out String>?): Int {
-        TODO("Not yet implemented")
+    override fun delete(uri: Uri, selection: String?, selectionArgs: Array<String>?): Int {
+        var count = 0
+        when (uriMatcher!!.match(uri)) {
+            order -> count = db!!.delete(
+                TABLE_NAME, selection,
+                selectionArgs
+            )
+            order_ID -> {
+                val id = uri.pathSegments[1]
+                count = db!!.delete(
+                    TABLE_NAME,
+                    _ID + " = " + id +
+                            if (!TextUtils.isEmpty(selection)) " AND ($selection)" else "",
+                    selectionArgs
+                )
+            }
+            else -> throw IllegalArgumentException("Unknown URI $uri")
+        }
+        context!!.contentResolver.notifyChange(uri, null)
+        return count
     }
 
     override fun update(p0: Uri, p1: ContentValues?, p2: String?, p3: Array<out String>?): Int {

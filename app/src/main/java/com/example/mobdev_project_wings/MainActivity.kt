@@ -14,12 +14,12 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         val order:Button= findViewById(R.id.orderBtn)
-        val location:Button = findViewById(R.id.locationBtn);
+        val location1:Button = findViewById(R.id.locationBtn);
         order.setOnClickListener{
             val intent= Intent(this, SecondActivity::class.java)
             startActivity(intent)
         }
-        location.setOnClickListener() {
+        location1.setOnClickListener() {
             val mapIntent: Intent = Uri.parse(
                 "https://goo.gl/maps/CRgKSqhb4hdn3jeWA"
             ).let { location ->

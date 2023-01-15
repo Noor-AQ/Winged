@@ -29,6 +29,9 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
+        //
+        <provider android:name="WingsProvider" android:authorities="com.example.mobdev_project_wings.WingsProvider"/>
+        //
         <service android:name=".Service"
             android:enabled="true"
             android:exported="true"/>

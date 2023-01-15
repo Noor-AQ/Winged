@@ -13,6 +13,7 @@ import android.os.Build
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
+import org.w3c.dom.Text
 
 class SecondActivity : AppCompatActivity() {
     var sum: Double = 0.0;
@@ -27,7 +28,24 @@ class SecondActivity : AppCompatActivity() {
         setContentView(R.layout.activity_second)
         val bt : Button = findViewById(R.id.bt);
         val bt2 : Button = findViewById(R.id.bt2);
+        val reset : Button = findViewById(R.id.resetBtn);
 
+        reset.setOnClickListener(){
+            contentResolver.delete(WingsProvider.CONTENT_URI,null,null);
+            val txt : TextView = findViewById(R.id.textView4);
+            txt.text = "";
+
+            val txt2 : TextView = findViewById(R.id.textView11);
+            txt2.text = "";
+
+            val txt3 : TextView = findViewById(R.id.textView7);
+            txt3.text = "";
+
+            val txt4:TextView = findViewById(R.id.textView10);
+            txt4.text = "";
+            val txt5 : TextView = findViewById(R.id.textView8);
+            txt5.text= "";
+        }
 
 
 

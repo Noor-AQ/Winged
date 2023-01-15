@@ -33,8 +33,7 @@ class SecondActivity : AppCompatActivity() {
 
         bt.setOnClickListener(){
 
-//            val uri = contentResolver.delete(WingsProvider.CONTENT_URI,null, null)
-
+            val uri = contentResolver.delete(WingsProvider.CONTENT_URI,null, null)
             if(quantity == -1 || types == "" || sauces == "" || drinks == "")
                 Toast.makeText(this, "COMPLETE ORDER PLEASE", Toast.LENGTH_LONG).show()
             else {
@@ -48,7 +47,11 @@ class SecondActivity : AppCompatActivity() {
                 startService();
             }
 
-            contentResolver.update(WingsProvider.CONTENT_URI,null,null)
+            val values = ContentValues()
+            values.put(
+                WingsProvider.PRICE, sum
+            )
+            contentResolver.update(WingsProvider.CONTENT_URI,values, null)
         }
 
         bt2.setOnClickListener(View.OnClickListener { stopService() })

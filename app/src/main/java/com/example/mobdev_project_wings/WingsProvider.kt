@@ -33,18 +33,21 @@ class WingsProvider():ContentProvider() {
         //can have without name column maybe??
         val CREATE_DB_TABLE =
             " CREATE TABLE " + TABLE_NAME + " (_id INTEGER PRIMARY KEY AUTOINCREMENT, "+ " quantity INTEGER, "  +" types TEXT, " + " sauces TEXT, " + "drinks TEXT," +
-                    " price INTEGER);"
+                    " price DOUBLE);"
         private var sUriMatcher = UriMatcher(UriMatcher.NO_MATCH);
         init
         {
             sUriMatcher.addURI(PROVIDER_NAME, "orders", ORDERS);
             sUriMatcher.addURI(PROVIDER_NAME, "orders/#", ORDERS_ID);
         }
+
     }
     private var db: SQLiteDatabase? = null
+
     private class DatabaseHelper internal constructor(context: Context?):
         SQLiteOpenHelper(context, DATABASE_NAME,null, DATABASE_VERSION){
         override fun onCreate(db: SQLiteDatabase?) {
+            db?.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME)
             db?.execSQL(CREATE_DB_TABLE)
         }
         override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
@@ -56,6 +59,7 @@ class WingsProvider():ContentProvider() {
 
 
         override fun onCreate(): Boolean {
+            db?.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME)
             val context = context
             val dbHelper = DatabaseHelper(context)
             db = dbHelper.writableDatabase
@@ -63,17 +67,42 @@ class WingsProvider():ContentProvider() {
     }
 
     override fun query(
-        p0: Uri,
-        p1: Array<out String>?,
-        p2: String?,
-        p3: Array<out String>?,
-        p4: String?
+        uri: Uri, projection: Array<String>?,
+        selection: String?, selectionArgs: Array<String>?, sortOrder: String?
     ): Cursor? {
-        TODO("Not yet implemented")
+        var sortOrder = sortOrder
+        val qb = SQLiteQueryBuilder()
+        qb.tables = TABLE_NAME
+        if (uriMatcher != null) {
+            when (uriMatcher.match(uri)) {
+                /* STUDENTS -> qb.projectionMap =
+                    STUDENTS_PROJECTION_MAP */
+                ORDERS_ID -> qb.appendWhere(_ID + "=" + uri.pathSegments[1])
+                else -> {null
+                }
+            }
+        }
+
+
+        if (sortOrder == null || sortOrder === "") {
+            /**
+             * By default sort on student names
+             */
+            sortOrder = _ID
+        }
+        val c = qb.query(db, projection, selection, selectionArgs, null, null, sortOrder)
+        /**
+         * register to watch a content URI for changes  */
+        c.setNotificationUri(context!!.contentResolver, uri)
+        return c
     }
 
-    override fun getType(p0: Uri): String? {
-        TODO("Not yet implemented")
+    override fun getType(uri: Uri): String? {
+        when (uriMatcher!!.match(uri)) {
+            ORDERS -> return "These info about students"
+            ORDERS_ID -> return "This info about specific studentstudents"
+            else -> throw IllegalArgumentException("Unsupported URI: $uri")
+        }
     }
 
     override fun insert(uri: Uri, values: ContentValues?): Uri? {
@@ -88,41 +117,19 @@ class WingsProvider():ContentProvider() {
 
     override fun delete(uri: Uri, selection: String?, selectionArgs: Array<String>?): Int {
         var count = 0
-        when (uriMatcher!!.match(uri)) {
-            ORDERS -> count = db!!.delete(
+        count = db!!.delete(
                 TABLE_NAME, selection,
                 selectionArgs
             )
-            ORDERS_ID -> {
-                val id = uri.pathSegments[1]
-                count = db!!.delete(
-                    TABLE_NAME,
-                    _ID + " = " + id +
-                            if (!TextUtils.isEmpty(selection)) " AND ($selection)" else "",
-                    selectionArgs
-                )
-            }
-            else -> throw IllegalArgumentException("Unknown URI $uri")
-        }
         context!!.contentResolver.notifyChange(uri, null)
         return count
     }
 
     override fun update(uri: Uri, values: ContentValues?, selection: String?, selectionArgs: Array<out String>?): Int {
         var count = 0
-        when (uriMatcher!!.match(uri)) {
-            ORDERS -> count = db!!.update(
-                TABLE_NAME, values, selection,
-                selectionArgs
-            )
-            ORDERS_ID -> count = db!!.update(
-                TABLE_NAME,
-                values,
-                _ID + " = " + uri.pathSegments[1] + (if (!TextUtils.isEmpty(selection)) " AND ($selection)" else ""),
-                selectionArgs
-            )
-            else -> throw IllegalArgumentException("Unknown URI $uri")
-        }
+        count = db!!.update(
+            TABLE_NAME, values, selection,
+            selectionArgs)
         context!!.contentResolver.notifyChange(uri, null)
         return count
     }
